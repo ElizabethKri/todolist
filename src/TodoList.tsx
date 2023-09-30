@@ -3,6 +3,7 @@ import React from 'react';
 type TodoListPropsType = {
     title: string
     tasks: Array<TaskType>
+    removeTask: (taskId: number) => void
 }
 
 export type TaskType = {
@@ -11,7 +12,7 @@ export type TaskType = {
     isDone: boolean
 }
 
-const TodoList: React.FC<TodoListPropsType> = ({title, tasks}) => {
+const TodoList: React.FC<TodoListPropsType> = ({title, tasks, removeTask}) => {
 
 
     // let tasksList : Array<JSX.Element> | JSX.Element;
@@ -36,16 +37,17 @@ const TodoList: React.FC<TodoListPropsType> = ({title, tasks}) => {
 
     const listItems: Array<JSX.Element> =
         tasks.map(tasks => {
+            const onClickRemoveTaskHandler = () => removeTask(tasks.id)
             return (
                 <li key={tasks.id}>
                     <input type="checkbox" checked={tasks.isDone}/>
                     <span>{tasks.title}</span>
-                    <button>x</button>
+                    <button onClick={onClickRemoveTaskHandler}>x</button>
                 </li>
             )
         })
 
-    const tasksList: Array<JSX.Element> | JSX.Element = tasks.length
+    const tasksList: JSX.Element = tasks.length
         ? <ul>{listItems}</ul>
         : <span>Your tasksList is empty</span>
 
