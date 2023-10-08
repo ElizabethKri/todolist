@@ -2,28 +2,43 @@ import React, {useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 
+
 export type FilterValuesType = "all" | "active" | "completed"
 function App() {
 
     const todoListTitle: string = "What to learn"
 
     const [tasks, setTasks] = useState<Array<TaskType>>([
-        {id: 1, isDone: true, title: "HTML&CSS"},
-        {id: 2, isDone: true, title: "JS"},
-        {id: 3, isDone: false, title: "React"},
-        {id: 4, isDone: false, title: "Node JS"},
-        {id: 5, isDone: false, title: "Angular"},
+        {id: crypto.randomUUID(), isDone: true, title: "HTML&CSS"},
+        {id: crypto.randomUUID(), isDone: true, title: "JS"},
+        {id: crypto.randomUUID(), isDone: false, title: "React"},
+        {id: crypto.randomUUID(), isDone: false, title: "Node JS"},
+        {id: crypto.randomUUID(), isDone: false, title: "Angular"},
     ])
 
     //при удалении создаем новый массив, без эл-та, который хотим удалить
-    const removeTask = (taskId: number) => {
-        const nextState: Array<TaskType> = []
-        for (let i = 0; i < tasks.length; i++){
-            if(tasks[i].id !== taskId){
-                nextState.push(tasks[i])
-            }
+    const removeTask = (taskId: string) => {
+        // const nextState: Array<TaskType> = []
+        // for (let i = 0; i < tasks.length; i++){
+        //     if(tasks[i].id !== taskId){
+        //         nextState.push(tasks[i])
+        //     }
+        // }
+
+        // const nextState: Array<TaskType> = tasks.filter(t => t.id !== taskId)
+
+        setTasks(tasks.filter(t => t.id !== taskId))
+    }
+
+    const addTask = (title: string) => {
+
+        const newTask: TaskType = {
+            id: crypto.randomUUID(),
+            title,
+            isDone: false
         }
-        setTasks(nextState)
+        // const nextState: Array<TaskType> = [...tasks, newTask]
+        setTasks([...tasks, newTask])
     }
 
     const [filter, setFilter] = useState<FilterValuesType>("all")
@@ -46,7 +61,10 @@ function App() {
             <TodoList title = {todoListTitle}
                       tasks={filteredTasksForRender}
                       removeTask={removeTask}
-                      changeFilter={changeFilter}/>
+                      changeFilter={changeFilter}
+                      addTask={addTask}
+
+            />
         </div>
     );
 }

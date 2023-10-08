@@ -1,20 +1,21 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {FilterValuesType} from "./App";
 
 type TodoListPropsType = {
     title: string
     tasks: Array<TaskType>
-    removeTask: (taskId: number) => void
+    removeTask: (taskId: string) => void
     changeFilter: (nextFilterValue: FilterValuesType) => void
+    addTask: (title: string) => void
 }
 
 export type TaskType = {
-    id: number
+    id: string
     title: string
     isDone: boolean
 }
 
-const TodoList: React.FC<TodoListPropsType> = ({title, tasks, removeTask, changeFilter}) => {
+const TodoList: React.FC<TodoListPropsType> = ({title, tasks, removeTask, changeFilter, addTask}) => {
 
 
     // let tasksList : Array<JSX.Element> | JSX.Element;
@@ -49,17 +50,39 @@ const TodoList: React.FC<TodoListPropsType> = ({title, tasks, removeTask, change
             )
         })
 
+    // const titleInput = useRef<HTMLInputElement>(null)
+
     const tasksList: JSX.Element = tasks.length
         ? <ul>{listItems}</ul>
         : <span>Your tasksList is empty</span>
+
+    const [newTaskTitle, setNewTaskTitle] =useState('')
 
 
     return (
         <div className={"todolist"}>
             <h3>{title}</h3>
             <div>
-                <input/>
-                <button>+</button>
+                {/*<input ref={titleInput}/>*/}
+                {/*<button onClick={() =>{*/}
+                {/*    if (titleInput.current){*/}
+                {/*        addTask(titleInput?.current.value)*/}
+                {/*        titleInput.current.value = ""*/}
+                {/*    }*/}
+                {/*}}>+</button>*/}
+                <input value={newTaskTitle}
+                onChange={(e) => setNewTaskTitle(e.target.value)}/>
+                <button
+                    disabled={newTaskTitle === "" || newTaskTitle.length >=15 }
+                    onClick={()=> {
+                        addTask(newTaskTitle)
+                        setNewTaskTitle('')
+                    }
+                }>+</button>
+                <div><span>{newTaskTitle.length < 15
+                    ? 'Enter new title'
+                    : 'Your title is too long'}</span></div>
+
             </div>
             {tasksList}
             <div>
