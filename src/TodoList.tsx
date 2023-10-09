@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, KeyboardEvent, ChangeEvent} from 'react';
 import {FilterValuesType} from "./App";
 
 type TodoListPropsType = {
@@ -38,6 +38,9 @@ const TodoList: React.FC<TodoListPropsType> = ({title, tasks, removeTask, change
     //     </ul>
     // }
 
+    const [newTaskTitle, setNewTaskTitle] =useState('')
+    console.log('Render')
+
     const listItems: Array<JSX.Element> =
         tasks.map(tasks => {
             const onClickRemoveTaskHandler = () => removeTask(tasks.id)
@@ -55,9 +58,17 @@ const TodoList: React.FC<TodoListPropsType> = ({title, tasks, removeTask, change
     const tasksList: JSX.Element = tasks.length
         ? <ul>{listItems}</ul>
         : <span>Your tasksList is empty</span>
-
-    const [newTaskTitle, setNewTaskTitle] =useState('')
-
+    const  onClickAddTask =
+        ()=> {
+            addTask(newTaskTitle)
+            setNewTaskTitle('')
+        }
+    const onKewDownAdd = (event: KeyboardEvent<HTMLInputElement>) => event.key === "Enter" && onClickAddTask()
+    const onChangeSetNewTaskTitle = (e: ChangeEvent<HTMLInputElement>) => setNewTaskTitle(e.target.value)
+    const isAddBtnDisabled = newTaskTitle === "" || newTaskTitle.length >=15
+    const userMessage = newTaskTitle.length < 15
+    ? <span>Enter new title</span>
+    : <span style={{color: "red"}}>Your title is too long</span>
 
     return (
         <div className={"todolist"}>
@@ -71,20 +82,16 @@ const TodoList: React.FC<TodoListPropsType> = ({title, tasks, removeTask, change
                 {/*    }*/}
                 {/*}}>+</button>*/}
                 <input value={newTaskTitle}
-                onChange={(e) => setNewTaskTitle(e.target.value)}/>
+                onChange={onChangeSetNewTaskTitle}
+                onKeyDown= {onKewDownAdd}
+                />
                 <button
-                    disabled={newTaskTitle === "" || newTaskTitle.length >=15 }
-                    onClick={()=> {
-                        addTask(newTaskTitle)
-                        setNewTaskTitle('')
-                    }
-                }>+</button>
-                <div><span>{newTaskTitle.length < 15
-                    ? 'Enter new title'
-                    : 'Your title is too long'}</span></div>
-
+                    disabled={isAddBtnDisabled}
+                    onClick={onClickAddTask}>
+                    +</button>
+                <div>{userMessage}</div>
             </div>
-            {tasksList}
+                     {tasksList}
             <div>
                 <button onClick={()=>changeFilter('all')}>All</button>
                 <button onClick={()=>changeFilter('active')}>Active</button>
