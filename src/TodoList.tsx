@@ -52,9 +52,10 @@ const TodoList: React.FC<TodoListPropsType> = ({
     const listItems: Array<JSX.Element> =
         tasks.map(tasks => {
             const onClickRemoveTaskHandler = () => removeTask(tasks.id)
+            const onchangeTaskStatusHandler = (event: ChangeEvent<HTMLInputElement>)=>changeTaskStatus(tasks.id, event.currentTarget.checked)
             return (
                 <li key={tasks.id}>
-                    <input onChange={(event)=>changeTaskStatus(tasks.id, event.currentTarget.checked)} type="checkbox" checked={tasks.isDone}/>
+                    <input onChange={onchangeTaskStatusHandler} type="checkbox" checked={tasks.isDone}/>
                     <span>{tasks.title}</span>
                     <button onClick={onClickRemoveTaskHandler}>x</button>
                 </li>
