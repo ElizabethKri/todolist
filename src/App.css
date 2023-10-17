@@ -25,3 +25,10 @@
   text-decoration: line-through;
   opacity: 0.5;
 }
+
+.btn-active{
+  background-color: #c377f8;
+  color: white;
+  border-radius: 3px;
+  border: 2px solid #c377f8;
+}
