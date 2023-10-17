@@ -1,4 +1,4 @@
-import React, {useRef, useState, KeyboardEvent, ChangeEvent} from 'react';
+import React, { useState, KeyboardEvent, ChangeEvent} from 'react';
 import {FilterValuesType} from "./App";
 
 type TodoListPropsType = {
@@ -7,6 +7,7 @@ type TodoListPropsType = {
     removeTask: (taskId: string) => void
     changeFilter: (nextFilterValue: FilterValuesType) => void
     addTask: (title: string) => void
+    changeTaskStatus: (taskId: string) =>void
 }
 
 export type TaskType = {
@@ -15,7 +16,14 @@ export type TaskType = {
     isDone: boolean
 }
 
-const TodoList: React.FC<TodoListPropsType> = ({title, tasks, removeTask, changeFilter, addTask}) => {
+const TodoList: React.FC<TodoListPropsType> = ({
+                                                   title,
+                                                   tasks,
+                                                   removeTask,
+                                                   changeFilter,
+                                                   addTask,
+                                                   changeTaskStatus
+                                               }) => {
 
 
     // let tasksList : Array<JSX.Element> | JSX.Element;
@@ -46,7 +54,7 @@ const TodoList: React.FC<TodoListPropsType> = ({title, tasks, removeTask, change
             const onClickRemoveTaskHandler = () => removeTask(tasks.id)
             return (
                 <li key={tasks.id}>
-                    <input type="checkbox" checked={tasks.isDone}/>
+                    <input onChange={()=>changeTaskStatus(tasks.id)} type="checkbox" checked={tasks.isDone}/>
                     <span>{tasks.title}</span>
                     <button onClick={onClickRemoveTaskHandler}>x</button>
                 </li>

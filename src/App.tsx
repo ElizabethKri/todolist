@@ -41,6 +41,15 @@ function App() {
         setTasks([...tasks, newTask])
     }
 
+    const changeTaskStatus = (taskId: string) => {
+        const updateTasks: Array<TaskType> = tasks.map(t => t.id === taskId
+        ? {...t, isDone : !t.isDone}
+            : t
+        )
+        setTasks(updateTasks)
+    }
+    const changeTaskTitle = () => {}
+
     const [filter, setFilter] = useState<FilterValuesType>("all")
     const getFilteredTasksForRender = (allTasks: Array<TaskType>, filterValue: FilterValuesType): Array<TaskType> => {
         switch (filterValue){
@@ -63,6 +72,7 @@ function App() {
                       removeTask={removeTask}
                       changeFilter={changeFilter}
                       addTask={addTask}
+                      changeTaskStatus={changeTaskStatus}
 
             />
         </div>
