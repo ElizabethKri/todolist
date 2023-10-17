@@ -41,9 +41,9 @@ function App() {
         setTasks([...tasks, newTask])
     }
 
-    const changeTaskStatus = (taskId: string) => {
+    const changeTaskStatus = (taskId: string, newIsDoneValue: boolean) => {
         const updateTasks: Array<TaskType> = tasks.map(t => t.id === taskId
-        ? {...t, isDone : !t.isDone}
+        ? {...t, isDone : newIsDoneValue}
             : t
         )
         setTasks(updateTasks)
