@@ -32,3 +32,8 @@
   border-radius: 3px;
   border: 2px solid #c377f8;
 }
+
+.input-error{
+  border: 2px solid red;
+  outline: none;
+}

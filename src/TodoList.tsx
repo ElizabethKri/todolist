@@ -49,6 +49,7 @@ const TodoList: React.FC<TodoListPropsType> = ({
     // }
 
     const [newTaskTitle, setNewTaskTitle] =useState('')
+    const [inputError, setInputError] = useState(false)
     console.log('Render')
 
     const listItems: Array<JSX.Element> =
@@ -57,7 +58,11 @@ const TodoList: React.FC<TodoListPropsType> = ({
             const onchangeTaskStatusHandler = (event: ChangeEvent<HTMLInputElement>)=>changeTaskStatus(tasks.id, event.currentTarget.checked)
             return (
                 <li key={tasks.id}>
-                    <input onChange={onchangeTaskStatusHandler} type="checkbox" checked={tasks.isDone}/>
+                    <input onChange={onchangeTaskStatusHandler}
+                           type="checkbox"
+                           checked={tasks.isDone}
+
+                    />
                     <span className={tasks.isDone ? "task-done" : "task"}>{tasks.title}</span>
                     <button onClick={onClickRemoveTaskHandler}>x</button>
                 </li>
@@ -71,11 +76,20 @@ const TodoList: React.FC<TodoListPropsType> = ({
         : <span>Your tasksList is empty</span>
     const  onClickAddTask =
         ()=> {
-            addTask(newTaskTitle)
+        const trimedTitle = newTaskTitle.trim()
+            if(trimedTitle){
+                addTask(newTaskTitle)
+            }
+            else {
+                setInputError(true)
+            }
             setNewTaskTitle('')
         }
     const onKewDownAdd = (event: KeyboardEvent<HTMLInputElement>) => event.key === "Enter" && onClickAddTask()
-    const onChangeSetNewTaskTitle = (e: ChangeEvent<HTMLInputElement>) => setNewTaskTitle(e.target.value)
+    const onChangeSetNewTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
+        setNewTaskTitle(e.target.value)
+        inputError && setInputError(false)
+    }
     const isAddBtnDisabled = newTaskTitle === "" || newTaskTitle.length >=15
     const userMessage = newTaskTitle.length < 15
     ? <span>Enter new title</span>
@@ -95,6 +109,7 @@ const TodoList: React.FC<TodoListPropsType> = ({
                 <input value={newTaskTitle}
                 onChange={onChangeSetNewTaskTitle}
                 onKeyDown= {onKewDownAdd}
+                className={inputError ? "input-error" : undefined}
                 />
                 <button
                     disabled={isAddBtnDisabled}
