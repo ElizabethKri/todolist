@@ -76,22 +76,33 @@ const TodoList: React.FC<TodoListPropsType> = ({
         : <span>Your tasksList is empty</span>
     const  onClickAddTask =
         ()=> {
-        const trimedTitle = newTaskTitle.trim()
-            if(trimedTitle){
-                addTask(newTaskTitle)
-            }
-            else {
-                setInputError(true)
-            }
+            addTask(newTaskTitle)
+        // const trimedTitle = newTaskTitle.trim()
+        //     if(trimedTitle){
+        //         addTask(newTaskTitle)
+        //     }
+        //     else {
+        //         setInputError(true)
+        //     }
             setNewTaskTitle('')
         }
     const onKewDownAdd = (event: KeyboardEvent<HTMLInputElement>) => event.key === "Enter" && onClickAddTask()
     const onChangeSetNewTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
-        setNewTaskTitle(e.target.value)
-        inputError && setInputError(false)
+
+        const trimedTitle = e.target.value.trim()
+        if(trimedTitle || e.target.value.length === 0){
+            inputError && setInputError(false)
+            setNewTaskTitle(trimedTitle)
+        }
+        else {
+            setInputError(true)
+        }
+
     }
     const isAddBtnDisabled = newTaskTitle === "" || newTaskTitle.length >=15
-    const userMessage = newTaskTitle.length < 15
+    const userMessage = inputError
+    ? <span style={{color: "red"}}>Your title is too empty</span>
+    : newTaskTitle.length < 15
     ? <span>Enter new title</span>
     : <span style={{color: "red"}}>Your title is too long</span>
 
